@@ -30,7 +30,9 @@ function mkdirP (p, opts, f, made) {
         }
         switch (er.code) {
             case 'ENOENT':
-                mkdirP(path.dirname(p), opts, function (er, made) {
+                var pdn = path.dirname(p);
+                if (pdn == p) return cb(er);  // 'e:/' == 'e:/'
+                mkdirP(pdn, opts, function (er, made) {
                     if (er) cb(er, made);
                     else mkdirP(p, opts, cb, made);
                 });
